@@ -12,7 +12,7 @@
         <transition name="fade" appear>
         <div class="bg-slate-400">
             <div v-for="(item,i) in items" :key="i" class="block p-6 hover:bg-slate-500">
-                <a :href="item.link">{{ item.title }}</a>
+                <router-link to="item.link">{{ item.title }}</router-link>
             </div>
         </div>
     </transition>
@@ -21,7 +21,7 @@
 <script>
 export default {
     name: 'Dropdown',
-    props: ['title','items'],
+    props: ['title','items','link'],
     data (){
         return{
             isOpen: false

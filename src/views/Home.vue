@@ -1,36 +1,44 @@
+
 <script>
+// import DataAnime from '../components/DataAnime.vue';
+import { reactive, onMounted } from 'vue';
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
-
 export default {
-  data() {
-    return {
-      animes: []
-    }
+    Name : 'AnimeData',    
+    data(){
+          return {
+        Animedata: []
+      };
+        },
+    mounted(){
+      this.GetAnime();
+    },
+    methods :{
+      async GetAnime(){
+      try{
+      const res = await axios.get('https://api.jikan.moe/v4/seasons/now');
+      this.Animedata = res.data.data.slice(0,2);
+      console.log(this.Animedata);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
-  mounted() {
-    this.getAnimes();
-  },
-  methods: {
-    getAnimes() {
-      axios.get('https://api.jikan.moe/v3/top/anime/1')
-        .then(response => {
-          this.animes = response.data.top;
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }
-  }
-}
-</script>
+};
 
+
+</script>
+<script >
+
+</script>
 <template>
   <div class="bg-sky-300 border-b-black border-b-2">
-    <div class="container">
+    <div class="container"> 
       <div class="px-10 py-5">
         <div class="flex justify-between">
           <div class="flex text-4xl py-5">
-            Winter Seasons 2023
+            
           </div>
           <div class="flex px-2 py-5 text-2xl ">
           
@@ -52,15 +60,22 @@ export default {
       </div>
     </div>
   </div>
-
-  <div class="container">
-    <div class="py-10 px-10">
-      <div class="flex justify-between bg-slate-400">
-        <div class="flex text-2xl">
-          aaa
+  <div class="max-w-sm w-full lg:max-w-full lg:flex overflow-auto">
+    <div class="leading-tight py-5 mx-auto">
+      <div class="px-10 py-10 flex justify-between text-black ">
+        <div class="border inline-block relative border-red-300 text-2xl text-center px-2 mx-1 " v-for="anime in Animedata"  :key="anime.mal_id">
+        <div class="h-1/2  py-6 px-6 mb-2 border border-blue-300">
+          {{anime.title }}
+          <div class="flex flex-col-2 bg-slate-400 ">
+            <img class="mx-auto" :src ="anime.images.jpg.large_image_url" alt="Anime Image">
+            <div class="text-sm">
+            {{ anime.synopsis }}
+            {{ anime.aired.from }}
+          </div>
+      </div>
+        </div>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
