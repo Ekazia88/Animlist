@@ -8,9 +8,9 @@
         d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
     </svg>
     </div>
-    <div class="lg:absolute px-0 py-0 " v-if="isOpen">
+    <div class="lg:absolute z-50 px-0 py-0 " v-if="isOpen">
         <transition name="fade" appear>
-        <div class="bg-slate-400">
+        <div class=" bg-slate-400">
             <div v-for="(item,i) in items" :key="i" class="block p-6 hover:bg-slate-500">
                 <router-link to="item.link">{{ item.title }}</router-link>
             </div>
