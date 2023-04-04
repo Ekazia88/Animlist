@@ -1,6 +1,5 @@
 
 <script>
-// import DataAnime from '../components/DataAnime.vue';
 import { reactive, onMounted } from 'vue';
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
@@ -59,27 +58,31 @@ export default {
     </div>
   </div>
   <div class="lg:w-full block min-h-screen bg-slate-700">
-    <div class="flex flex-wrap gap-2 justify-center py-[2rem] bg-red-500 overflow-hidden relative">
-      <div class="inline-block  w-[30%] text-[14px] px-[2px] whitespace-normal bg-red-200" v-for="anime in Animedata"  :key="anime.mal_id">
-        <div class="flex items-center h-[4rem] text-[1.2em] px-[1rem] font-bold leading-[1.1rem] weight-700 text-center whitespace-pre-line relative border border-violet-400">
-          <a class="my-0 mx-auto md:overflow-hidden text-ellipsis">
-          {{ anime.title }} 
-          </a>
-        </div>
-        <div class="flex flex-col-2 font-bold py-1">
-          <img class="w-[10rem] object-cover" :src ="anime.images.jpg.large_image_url" alt="Anime Image">
-          <div class="">
-            <div>
+    <div class="flex flex-wrap gap-2 justify-between py-[2rem]  mx-4 my-4 bg-white overflow-hidden">
+      <div class="inline-flex max-w-[30%] h-[31.1rem] text-[14px] px-[0px] whitespace-normal  overflow-hidden" v-for="anime in Animedata"  :key="anime.mal_id">
+        <div class="block bg-slate-500 m-10">
+          <div class="flex shadow-lg items-center h-[3rem] text-[1.2em] px-[0rem] font-bold leading-[1.1rem] weight-700 text-center whitespace-pre-line relative">
+            <a class="my-0 mx-auto md:overflow-hidden text-ellipsis">
+              {{ anime.title }} 
+            </a>
+          </div>
+          <div class="h-[120px] w-[240px] float-left relative ">
+            <img class="pl-2 py-2" :src ="anime.images.jpg.large_image_url" alt="Anime Image">
+          </div>
+          <div class=" bg-red-300 max-h-[325px] flex flex-col my-2">
+            <div class="shadow-lg text-center font-semibold">
               {{ anime.source }}
             </div>
-            {{ anime.synopsis }}
+            <div class="overflow-y-hidden hover:overflow-y-auto scrollbar scrollbar-track-cyan-200 text-left whitespace-normal p-[0.5em] leading-[1.2]">
+              {{ anime.synopsis }}
+            </div> 
+          </div>
+          <div class="my-0 p-2 text-center bg-blue-500">
+              {{ anime.status }}
           </div>
         </div>
-        <div class="px-2 text-center bg-blue-500">
-            {{ anime.status }}
-          </div>
       </div>
     </div>
   </div>
-  
+
 </template>
