@@ -1,45 +1,51 @@
 
 <script>
-import { reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import React, { useEffect, useState } from "react";
+import SeasonsNowAnime from '@/components/SeasonsNowAnime.vue';
+import CarouselSeasons from "@/components/CarouselSeasons.vue";
 import axios from 'axios';
 export default {
-    Name : 'AnimeData',    
-    data(){
-          return {
-        Animedata: []
-      };
-        },
-    mounted(){
-      this.GetAnime();
+    Name : 'Home',
+    components :{
+      SeasonsNowAnime,
+      CarouselSeasons,
     },
-    methods :{
-      async GetAnime(){
-      try{
-      const res = await axios.get('https://api.jikan.moe/v4/seasons/2023/summer');
-      this.Animedata = res.data.data.slice(0,);
-      console.log(this.Animedata);
-      } catch (error) {
-        console.error(error);
+    props: {
+      ArrListData : Array,
+    },
+    setup(props){
+      const ListSeasonData = ref(props.ArrListData || [] );
+      const ListSeasonYears = ref([]);
+      const fecthListSeasonData = async () => {
+      try{  
+        const response = await axios.get('https://api.jikan.moe/v4/seasons');
+        ListSeasonData.value = response.data.data;
+        ListSeasonYears.value = ListSeasonData.value.map(year => year.seasons.map(season => `${season} ${year.year}`)).flat()
+        console.log(ListSeasonYears.value)
+      }catch(error){
+        console.error('Error Fetching Data', error);
       }
+      };
+      onMounted(()=> {
+        fecthListSeasonData();
+      });
+      return{
+        ListSeasonYears,
+      };
     },
-  },
+    
 };
-
-
-</script>
-<script >
 
 </script>
 <template>
   <div class="bg-sky-300 border-b-black border-b-2">
     <div class="container"> 
       <div class="px-10 py-5">
-        <div class="flex justify-between">
-          <div class="flex text-4xl py-5">
-          </div>
-          <div class="flex px-2 py-5 text-2xl ">
-            <div class="pt-0 absolute mx-auto text-gray-600">
+        <div class=" flex justify-between">
+          <div class="flex px-1 py-2 text-2xl ">
+            <CarouselSeasons :seasons = "ListSeasonYears"/>
+            <div class="  text-gray-600">
               <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
               type="search" name="search" placeholder="Search">
               <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
@@ -57,35 +63,6 @@ export default {
       </div>
     </div>
   </div>
-  <div class="lg:w-full block min-h-screen bg-slate-700">
-    <div class="flex flex-wrap gap-2 justify-between py-[2rem]  mx-4 my-4 bg-white overflow-hidden">
-      <div class="inline-flex max-w-[30%] h-[31.1rem] text-[14px] px-[0px] whitespace-normal  overflow-hidden" v-for="anime in Animedata"  :key="anime.mal_id">
-        <div class=" flex flex-col bg-slate-500 m-10">
-          <div class="flex shadow-lg items-center h-[3rem] text-[1.2em] px-[0rem] font-bold leading-[1.1rem] weight-700 text-center whitespace-pre-line relative">
-            <a class="my-0 mx-auto md:overflow-hidden text-ellipsis">
-              {{ anime.title }} 
-            </a>
-          </div>
-          <div>
-            <div class="h-[120px] w-[240px] float-left relative px-2">
-              <img class="pl-2 py-2" :src ="anime.images.jpg.large_image_url" alt="Anime Image">
-            </div>
-            <div class=" max-h-[305px] flex flex-col my-2 mx-2">
-              <div class="shadow-sm shadow-gray-800 text-center font-semibold ">
-                {{ anime.source }}
-              </div>
-              <div class="overflow-y-hidden hover:overflow-y-auto scrollbar scrollbar-track-cyan-200 text-left whitespace-normal p-[0.5em] leading-[1.2]">
-                {{ anime.synopsis }}
-              </div> 
-            </div> 
-        </div>
-        <div class="mt-auto py-2 text-center bg-blue-700 font-bold">
-                {{ anime.status }}
-        </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
+  <SeasonsNowAnime />
 
 </template>
